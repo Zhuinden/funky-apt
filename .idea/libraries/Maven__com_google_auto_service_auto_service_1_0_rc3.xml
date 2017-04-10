@@ -8,6 +8,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/com/google/auto/service/auto-service/1.0-rc3/auto-service-1.0-rc3-sources.jar!/" />
+      <root url="jar://C:/Program Files/Java/jdk1.8.0_20/lib/tools.jar!/" />
     </SOURCES>
   </library>
 </component>

@@ -8,6 +8,9 @@ import java.util.Arrays;
  */
 @Funk
 public class App {
+    String hello;
+    String world;
+
     public static void main(String[] args) throws Exception {
         //System.out.println("Hello World!");
         String currentDir = new File("").getAbsolutePath();
