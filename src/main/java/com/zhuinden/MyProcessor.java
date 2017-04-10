@@ -49,8 +49,8 @@ public class MyProcessor extends AbstractProcessor {
             String packageName = className.substring(0, className.lastIndexOf('.'));
             messager.printMessage(Diagnostic.Kind.NOTE, "Package Name [" + packageName + "], Class Name [" + className + "], Simple Name [" + simpleName + "]");
             try {
-
-                JavaFile javaFile = JavaFile.builder(packageName, TypeSpec.classBuilder("Generated" + simpleName + "Thing").build()).build();
+                TypeSpec typeSpec = TypeSpec.classBuilder("Generated" + simpleName + "Thing").build();
+                JavaFile javaFile = JavaFile.builder(packageName, typeSpec).build();
                 javaFile.writeTo(filer);
             } catch(IOException e) {
                 messager.printMessage(Diagnostic.Kind.ERROR, "FAILED TO WRITE FILE FOR [" + className + "]");
