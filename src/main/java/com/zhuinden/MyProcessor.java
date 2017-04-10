@@ -46,15 +46,12 @@ public class MyProcessor extends AbstractProcessor {
             TypeMirror typeMirror = element.asType();
             String className = typeMirror.toString();
             String simpleName = element.getSimpleName().toString();
-            messager.printMessage(Diagnostic.Kind.NOTE, "Class Name [" + className + "], Simple Name [" + simpleName + "]");
+            String packageName = className.substring(0, className.lastIndexOf('.'));
+            messager.printMessage(Diagnostic.Kind.NOTE, "Package Name [" + packageName + "], Class Name [" + className + "], Simple Name [" + simpleName + "]");
             try {
-                Class<?> clazz = Class.forName(className);
-                JavaFile javaFile = JavaFile.builder(clazz.getPackage().getName(), TypeSpec.classBuilder("Generated" + simpleName + "Thing").build()).build();
+
+                JavaFile javaFile = JavaFile.builder(packageName, TypeSpec.classBuilder("Generated" + simpleName + "Thing").build()).build();
                 javaFile.writeTo(filer);
-            } catch(ClassNotFoundException e) {
-                messager.printMessage(Diagnostic.Kind.ERROR, "FAILED TO CREATE CLASS FOR [" + className + "]");
-                e.printStackTrace();
-                return true;
             } catch(IOException e) {
                 messager.printMessage(Diagnostic.Kind.ERROR, "FAILED TO WRITE FILE FOR [" + className + "]");
                 e.printStackTrace();
