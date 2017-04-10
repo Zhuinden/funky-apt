@@ -23,6 +23,14 @@
             <artifactId>auto-service</artifactId>
             <version>1.0-rc3</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.squareup/javapoet -->
+        <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>javapoet</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

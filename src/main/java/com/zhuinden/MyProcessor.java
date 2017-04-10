@@ -1,16 +1,18 @@
 package com.zhuinden;
 
 import com.google.auto.service.AutoService;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.TypeSpec;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +42,24 @@ public class MyProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Funk.class);
         for(Element element : elements) {
-            messager.printMessage(Diagnostic.Kind.ERROR, "Element traversed", element);
+            messager.printMessage(Diagnostic.Kind.NOTE, "Element traversed: " + element.asType(), element);
+            TypeMirror typeMirror = element.asType();
+            String className = typeMirror.toString();
+            String simpleName = element.getSimpleName().toString();
+            messager.printMessage(Diagnostic.Kind.NOTE, "Class Name [" + className + "], Simple Name [" + simpleName + "]");
+            try {
+                Class<?> clazz = Class.forName(className);
+                JavaFile javaFile = JavaFile.builder(clazz.getPackage().getName(), TypeSpec.classBuilder("Generated" + simpleName + "Thing").build()).build();
+                javaFile.writeTo(filer);
+            } catch(ClassNotFoundException e) {
+                messager.printMessage(Diagnostic.Kind.ERROR, "FAILED TO CREATE CLASS FOR [" + className + "]");
+                e.printStackTrace();
+                return true;
+            } catch(IOException e) {
+                messager.printMessage(Diagnostic.Kind.ERROR, "FAILED TO WRITE FILE FOR [" + className + "]");
+                e.printStackTrace();
+                return true;
+            }
         }
         return false;
     }
