@@ -10,11 +10,12 @@ import java.util.Arrays;
 public class App {
     public static void main(String[] args) throws Exception {
         //System.out.println("Hello World!");
+        String currentDir = new File("").getAbsolutePath();
         createDirectoryIfDoesNotExist("target");
         createDirectoryIfDoesNotExist("target/generated-sources");
         com.sun.tools.javac.Main.main(Arrays.asList("-proc:only",
                 "-processor", "com.zhuinden.MyProcessor",
-                "c:/Development/HomeProjects/funky-apt/src/main/java/com/zhuinden/App.java", "-s", "target/generated-sources").toArray(new String[6]));
+                currentDir + "/src/main/java/com/zhuinden/App.java", "-s", "target/generated-sources").toArray(new String[6]));
     }
 
     private static void createDirectoryIfDoesNotExist(String pathname) {
